@@ -1,0 +1,71 @@
+/* variables */
+@import './components/core/variables';
+/* components */
+@import './components/index';
+
+body {
+  margin: 0;
+  font-family: Helvetica, sans-serif;
+  font-size: 16px;
+  color: $text-main-color;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.wrapper {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.main {
+  &__wrapper {
+    padding: 30px;
+  }
+}
+
+.menu {
+  padding: 30px 20px;
+  min-width: 240px;
+
+  &__section {
+    margin: 0 0 20px;
+  }
+
+  &__title {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 15px;
+    display: flex;
+  }
+
+  &__filters {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__filter {
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: $text-secondary-color;
+
+    &-item {
+      margin: 0 5px 0 0;
+    }
+
+    &-input {
+      margin: 0 0 0 5px;
+    }
+
+    &-price {
+      display: flex;
+    }
+  }
+}

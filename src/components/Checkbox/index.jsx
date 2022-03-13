@@ -9,6 +9,7 @@ const Checkbox = ({
   stopsFilters,
   bestPrices,
   filteredFlights,
+  sortType,
 }) => {
   const stops = [];
   flights?.map((item) => {
@@ -102,6 +103,22 @@ const Checkbox = ({
     <>
       {carriersAndPrices
         ? carriersAndPrices.map((item, index) => {
+            console.log(stopsFilters);
+            if (!stopsFilters.includes(0)) {
+              return (
+                <label className='menu__filter' key={index}>
+                  <input
+                    className='menu__filter-item'
+                    type='checkbox'
+                    onChange={() => handleToggle(item.carrier, airlineFilters)}
+                  />
+                  <span className='menu__filter-name'>- {item.carrier}</span>
+                  <span className='menu__filter-price'>
+                    От {item.price} руб.
+                  </span>
+                </label>
+              );
+            }
             if (uniqueFacets?.has(item.carrier)) {
               return (
                 <label className='menu__filter' key={index}>
@@ -111,10 +128,13 @@ const Checkbox = ({
                     onChange={() => handleToggle(item.carrier, airlineFilters)}
                   />
                   <span className='menu__filter-name'>- {item.carrier}</span>
-                  <span className='menu__filter-price'>От {item.price}</span>
+                  <span className='menu__filter-price'>
+                    От {item.price} руб.
+                  </span>
                 </label>
               );
-            } else return null;
+            }
+            return null;
           })
         : ''}
     </>

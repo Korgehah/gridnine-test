@@ -18,6 +18,7 @@ const Menu = ({
   priceTo,
   setPriceFilter,
   bestPrices,
+  setAirlineFilters,
 }) => {
   const getPrice = () => {
     let priceToCurrent = priceTo.current.value;
@@ -115,6 +116,7 @@ const Menu = ({
             stopsFilters={stopsFilters}
             filteredFlights={filteredFlights}
             bestPrices={bestPrices}
+            setAirlineFilters={setAirlineFilters}
           />
         </div>
       </div>
@@ -248,6 +250,7 @@ const App = () => {
             priceTo={priceTo}
             setPriceFilter={setPriceFilter}
             bestPrices={bestPrices}
+            setAirlineFilters={setAirlineFilters}
           />
           <FlightCards
             flights={filteredFlights}

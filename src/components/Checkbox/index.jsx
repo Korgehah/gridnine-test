@@ -59,18 +59,6 @@ const Checkbox = ({
     }
   });
 
-  const facets = [];
-  let uniqueFacets = [];
-
-  carriersAndPrices.map((item) => {
-    filteredFlights?.forEach((event) => {
-      if (event.flight.carrier.caption.includes(item.carrier)) {
-        facets.push(item.carrier);
-      }
-    });
-    return (uniqueFacets = new Set(facets));
-  });
-
   const getUnique = (arr) => {
     return Array.from(new Set(arr)).sort();
   };
@@ -103,48 +91,22 @@ const Checkbox = ({
     <>
       {carriersAndPrices
         ? carriersAndPrices.map((item, index) => {
-            if (
-              stopsFilters === [0] ||
-              stopsFilters.length === 0 ||
-              stopsFilters.includes(1)
-            ) {
-              console.log(airlineFilters);
-              return (
-                <label className='menu__filter' key={index}>
-                  <input
-                    className='menu__filter-item'
-                    type='checkbox'
-                    onChange={() => {
-                      if (stopsFilters === [0] && stopsFilters.length === 1)
-                        setAirlineFilters([]);
-                      handleToggle(item.carrier, airlineFilters);
-                    }}
-                  />
-                  <span className='menu__filter-name'>- {item.carrier}</span>
-                  <span className='menu__filter-price'>
-                    От {item.price} руб.
-                  </span>
-                </label>
-              );
-            }
-            if (uniqueFacets?.has(item.carrier)) {
-              return (
-                <label className='menu__filter' key={index}>
-                  <input
-                    className='menu__filter-item'
-                    type='checkbox'
-                    onChange={() => handleToggle(item.carrier, airlineFilters)}
-                  />
-                  <span className='menu__filter-name'>- {item.carrier}</span>
-                  <span className='menu__filter-price'>
-                    От {item.price} руб.
-                  </span>
-                </label>
-              );
-            }
-            return null;
+            return (
+              <label className='menu__filter' key={index}>
+                <input
+                  className='menu__filter-item'
+                  type='checkbox'
+                  onChange={() => {
+                    handleToggle(item.carrier, airlineFilters);
+                  }}
+                />
+                <span className='menu__filter-name'>- {item.carrier}</span>
+                <span className='menu__filter-price'>От {item.price} руб.</span>
+              </label>
+            );
           })
         : ''}
+      ;
     </>
   );
 };

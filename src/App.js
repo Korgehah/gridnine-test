@@ -11,14 +11,12 @@ const Menu = ({
   setSortType,
   handleToggle,
   nameNumbers,
-  filteredFlights,
   airlineFilters,
   stopsFilters,
   priceFrom,
   priceTo,
   setPriceFilter,
   bestPrices,
-  setAirlineFilters,
 }) => {
   const getPrice = () => {
     let priceToCurrent = priceTo.current.value;
@@ -114,9 +112,7 @@ const Menu = ({
             handleToggle={handleToggle}
             airlineFilters={airlineFilters}
             stopsFilters={stopsFilters}
-            filteredFlights={filteredFlights}
             bestPrices={bestPrices}
-            setAirlineFilters={setAirlineFilters}
           />
         </div>
       </div>
@@ -243,14 +239,12 @@ const App = () => {
             flights={flights}
             handleToggle={handleToggle}
             nameNumbers={nameNumbers}
-            filteredFlights={filteredFlights}
             airlineFilters={airlineFilters}
             stopsFilters={stopsFilters}
             priceFrom={priceFrom}
             priceTo={priceTo}
             setPriceFilter={setPriceFilter}
             bestPrices={bestPrices}
-            setAirlineFilters={setAirlineFilters}
           />
           <FlightCards
             flights={filteredFlights}

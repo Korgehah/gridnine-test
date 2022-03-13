@@ -8,6 +8,7 @@ const Checkbox = ({
   airlineFilters,
   stopsFilters,
   bestPrices,
+  filteredFlights,
 }) => {
   const stops = [];
   flights?.map((item) => {
@@ -57,6 +58,18 @@ const Checkbox = ({
     }
   });
 
+  const facets = [];
+  let uniqueFacets = [];
+
+  carriersAndPrices.map((item) => {
+    filteredFlights?.forEach((event) => {
+      if (event.flight.carrier.caption.includes(item.carrier)) {
+        facets.push(item.carrier);
+      }
+    });
+    return (uniqueFacets = new Set(facets));
+  });
+
   const getUnique = (arr) => {
     return Array.from(new Set(arr)).sort();
   };
@@ -66,46 +79,44 @@ const Checkbox = ({
   if (isStops)
     return (
       <>
-        {uniqueStops ? (
-          uniqueStops.map((stop, index) => {
-            return (
-              <label className='menu__filter' key={index}>
-                <input
-                  className='menu__filter-item'
-                  type='checkbox'
-                  onChange={() => handleToggle(stop, stopsFilters)}
-                />
-                <span className='menu__filter-name'>
-                  - {stop !== 0 ? stop : ''} {nameNumbers(stop)}
-                </span>
-              </label>
-            );
-          })
-        ) : (
-          <span>фильтры загружаются</span>
-        )}
+        {uniqueStops
+          ? uniqueStops.map((stop, index) => {
+              return (
+                <label className='menu__filter' key={index}>
+                  <input
+                    className='menu__filter-item'
+                    type='checkbox'
+                    onChange={() => handleToggle(stop, stopsFilters)}
+                  />
+                  <span className='menu__filter-name'>
+                    - {stop !== 0 ? stop : ''} {nameNumbers(stop)}
+                  </span>
+                </label>
+              );
+            })
+          : ''}
       </>
     );
 
   return (
     <>
-      {carriersAndPrices ? (
-        carriersAndPrices.map((item, index) => {
-          return (
-            <label className='menu__filter' key={index}>
-              <input
-                className='menu__filter-item'
-                type='checkbox'
-                onChange={() => handleToggle(item.carrier, airlineFilters)}
-              />
-              <span className='menu__filter-name'>- {item.carrier}</span>
-              <span className='menu__filter-price'>От {item.price}</span>
-            </label>
-          );
-        })
-      ) : (
-        <span>фильтры загружаются</span>
-      )}
+      {carriersAndPrices
+        ? carriersAndPrices.map((item, index) => {
+            if (uniqueFacets?.has(item.carrier)) {
+              return (
+                <label className='menu__filter' key={index}>
+                  <input
+                    className='menu__filter-item'
+                    type='checkbox'
+                    onChange={() => handleToggle(item.carrier, airlineFilters)}
+                  />
+                  <span className='menu__filter-name'>- {item.carrier}</span>
+                  <span className='menu__filter-price'>От {item.price}</span>
+                </label>
+              );
+            } else return null;
+          })
+        : ''}
     </>
   );
 };

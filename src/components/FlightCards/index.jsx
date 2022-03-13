@@ -1,19 +1,24 @@
 import React from 'react';
 
-// interface FligtItem {
-//   isUnderlined: boolean;
-//   startCity: string;
-//   startAirport: string;
-//   startUid: string;
-//   startDate: string;
-//   endCity: string;
-//   endAirport: string;
-//   endUid: string;
-//   endDate: string;
-//   stops: number;
-//   carrier: string;
-//   duration: number;
-// }
+const getTimeFromMins = (mins) => {
+  let hours = Math.trunc(mins / 60);
+  let minutes = mins % 60;
+  return hours + ' ч ' + minutes + ' мин';
+};
+
+const getDate = (flightDate) => {
+  const date = new Date(flightDate);
+  const time = date.toLocaleTimeString([], {
+    hour: 'numeric',
+    minute: 'numeric',
+  });
+  const day = date.toLocaleDateString('bestFit', {
+    day: 'numeric',
+    month: 'short',
+    weekday: 'short',
+  });
+  return { time: time, day: day };
+};
 
 const FlightItem = ({
   isUnderlined,
@@ -28,32 +33,10 @@ const FlightItem = ({
   stops,
   carrier,
   duration,
+  nameNumbers,
 }) => {
-  const getTimeFromMins = (mins) => {
-    let hours = Math.trunc(mins / 60);
-    let minutes = mins % 60;
-    return hours + ' ч ' + minutes + ' мин';
-  };
-
-  const getTimeFromDate = (flightDate) => {
-    const date = new Date(flightDate);
-    const time = date.toLocaleTimeString([], {
-      hour: 'numeric',
-      minute: 'numeric',
-    });
-    return time;
-  };
-
-  const getDayFromDate = (flightDate) => {
-    const date = new Date(flightDate);
-    const day = date.toLocaleDateString('bestFit', {
-      day: 'numeric',
-      month: 'short',
-      weekday: 'short',
-    });
-    return day;
-  };
-
+  const convertedStartDate = getDate(startDate);
+  const convertedEndDate = getDate(endDate);
   return (
     <div
       className={`flight__ticket ${
@@ -95,8 +78,8 @@ l4486 0 2 -694 3 -694 24 -26 c29 -31 84 -35 121 -9 14 10 747 609 1630 1332
       </div>
       <div className='flight__dates'>
         <div className='flight__departure'>
-          <span className='flight__time'>{getTimeFromDate(startDate)}</span>{' '}
-          <span className='flight__date'>{getDayFromDate(startDate)}</span>
+          <span className='flight__time'>{convertedStartDate.time}</span>{' '}
+          <span className='flight__date'>{convertedStartDate.day}</span>
         </div>
         <span className='flight__time'>
           <svg
@@ -120,70 +103,104 @@ l4486 0 2 -694 3 -694 24 -26 c29 -31 84 -35 121 -9 14 10 747 609 1630 1332
           {getTimeFromMins(duration)}
         </span>
         <div className='flight__arival'>
-          <span className='flight__date'>{getDayFromDate(endDate)}</span>{' '}
-          <span className='flight__time'>{getTimeFromDate(endDate)}</span>
+          <span className='flight__date'>{convertedEndDate.day}</span>{' '}
+          <span className='flight__time'>{convertedEndDate.time}</span>
         </div>
       </div>
       <span className='flight__stops'>
-        {stops === 1
-          ? '1 пересадка'
-          : stops === 2
-          ? '2 и более пересадок'
-          : 'без пересадок'}
+        {stops !== 0 ? stops : ''} {nameNumbers(stops)}
       </span>
       <span className='flight__airline'>Рейс выполняет: {carrier}</span>
     </div>
   );
 };
 
-const FlightCard = ({ flight }) => {
-  console.log(flight.legs);
+const FlightCard = ({ flight, price, currency, nameNumbers }) => {
   return (
     <div className='flight__card'>
       <div className='flight__header'>
         <span className='flight__logo'>LOGO</span>
         <div className='flight__info'>
           <span className='flight__price'>
-            {flight.price.total.amount} {flight.price.total.currency}
+            {price} {currency}
           </span>
           <span className='flight__text'>
             Стоимость для одного взрослого пассажира
           </span>
         </div>
       </div>
-      {flight.legs.map((leg, index) => (
-        <FlightItem
-          key={index}
-          isUnderlined={index === 0 ? true : false}
-          startCity={leg.segments[0].departureCity?.caption}
-          startAirport={leg.segments[0].departureAirport?.caption}
-          startUid={leg.segments[0].departureAirport?.uid}
-          startDate={leg.segments[0].departureDate}
-          endCity={leg.segments[leg.segments.length - 1].arrivalCity?.caption}
-          endAirport={
-            leg.segments[leg.segments.length - 1].arrivalAirport?.caption
-          }
-          endUid={leg.segments[leg.segments.length - 1].arrivalAirport?.uid}
-          endDate={leg.segments[leg.segments.length - 1].arrivalDate}
-          duration={leg.duration}
-          stops={leg.segments.length - 1}
-          carrier={flight.carrier.caption}
-        />
-      ))}
+      {flight.legs.map((leg, index) => {
+        const isUnderlined = index === 0 ? true : false;
+        const startCity = leg.segments[0].departureCity?.caption;
+        const startAirport = leg.segments[0].departureAirport?.caption;
+        const startUid = leg.segments[0].departureAirport?.uid;
+        const startDate = leg.segments[0].departureDate;
+        const endCity =
+          leg.segments[leg.segments.length - 1].arrivalCity?.caption;
+        const endAirport =
+          leg.segments[leg.segments.length - 1].arrivalAirport?.caption;
+        const endUid =
+          leg.segments[leg.segments.length - 1].arrivalAirport?.uid;
+        const endDate = leg.segments[leg.segments.length - 1].arrivalDate;
+        const duration = leg.duration;
+        const stops = leg.segments.length - 1;
+        const carrier = flight.carrier.caption;
+        return (
+          <FlightItem
+            key={index}
+            isUnderlined={isUnderlined}
+            startCity={startCity}
+            startAirport={startAirport}
+            startUid={startUid}
+            startDate={startDate}
+            endCity={endCity}
+            endAirport={endAirport}
+            endUid={endUid}
+            endDate={endDate}
+            duration={duration}
+            stops={stops}
+            carrier={carrier}
+            nameNumbers={nameNumbers}
+          />
+        );
+      })}
       <button className='flight__button'>Выбрать</button>
     </div>
   );
 };
 
-const FlightCards = ({ flights }) => {
+const FlightCards = ({
+  flights,
+  flightsToShow,
+  setFlightsToShow,
+  nameNumbers,
+}) => {
   return (
     <div className='flight'>
       {flights ? (
-        flights.map((item, index) => (
-          <FlightCard key={index} flight={item.flight} />
-        ))
+        flights
+          .slice(0, flightsToShow)
+          .map((item, index) => (
+            <FlightCard
+              key={index}
+              flight={item.flight}
+              price={item.flight.price.total.amount}
+              currency={item.flight.price.total.currency}
+              nameNumbers={nameNumbers}
+            />
+          ))
       ) : (
         <span className='flight__loader'>Идет загрузка...</span>
+      )}
+      {flights && flights.length > flightsToShow ? (
+        <button
+          className='flight__button flight__button_colored'
+          onClick={() => setFlightsToShow(flightsToShow + 2)}
+        >
+          Показать еще
+        </button>
+      ) : (
+        ''
       )}
     </div>
   );

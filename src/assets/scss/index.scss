@@ -25,15 +25,15 @@ a {
   justify-content: center;
 }
 
-.main {
-  &__wrapper {
-    padding: 30px;
-  }
-}
-
 .menu {
   padding: 30px 20px;
-  min-width: 240px;
+  width: 100%;
+  max-width: 260px;
+  position: sticky;
+  max-height: 1000px;
+  height: 100vh;
+  overflow-y: scroll;
+  top: 0;
 
   &__section {
     margin: 0 0 20px;
@@ -55,6 +55,7 @@ a {
     margin: 0 0 8px;
     font-size: 14px;
     color: $text-secondary-color;
+    cursor: pointer;
 
     &-item {
       margin: 0 5px 0 0;
@@ -67,5 +68,10 @@ a {
     &-price {
       display: flex;
     }
+  }
+
+  &__button {
+    width: 100px;
+    height: 40px;
   }
 }

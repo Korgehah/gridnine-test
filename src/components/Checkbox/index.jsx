@@ -8,8 +8,6 @@ const Checkbox = ({
   airlineFilters,
   stopsFilters,
   bestPrices,
-  filteredFlights,
-  setAirlineFilters,
 }) => {
   const stops = [];
   flights?.map((item) => {
